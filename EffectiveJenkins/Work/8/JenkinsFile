@@ -10,6 +10,7 @@ pipeline {
 			steps {
 
 				echo "Hello World...."
+				echo "This will be the second stage as the checking out the JenkinsFile is the first stage..."
 			}
 
 		}
