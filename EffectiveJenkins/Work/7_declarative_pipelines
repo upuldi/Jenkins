@@ -1,0 +1,40 @@
+pipeline {
+
+    agent {
+        any
+    }
+    
+    tools {
+        maven 'M3'
+    }
+    
+    parameters {
+    
+        string(name: 'VERSION',
+            defaultValue: '1.0',
+            description: 'What is the version to be build?') 
+    }
+    
+    
+    stages {
+    
+        stage ('Some Stage') {
+            
+            echo "This is a stage in the pipeline"
+            
+            steps {
+                sh "echo steps can be defined inside steps"
+                sh "echo another step"
+            }
+        
+        }
+    }
+    
+    post {
+    
+        always {
+        
+            echo "Pipeline Executed"
+        }
+    }
+} 

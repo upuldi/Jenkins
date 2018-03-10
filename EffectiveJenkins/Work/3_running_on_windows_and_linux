@@ -1,0 +1,17 @@
+node {
+   
+   echo 'Simple Pipeline....'
+   
+   stage ('Stage 1') {
+       
+       echo 'This is the first stage....'
+       
+       if (isUnix()) {
+           sh 'echo this is unix'
+           sh 'ls -al'
+       } else {
+           bat 'echo this is Windows'
+           bat 'dir'
+       }
+   }
+} 

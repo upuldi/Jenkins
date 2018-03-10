@@ -1,0 +1,13 @@
+node {
+   
+   echo 'Simple Pipeline....'
+   
+   stage ('Checkout') {
+       
+       echo 'This is the first stage....'
+       
+       git 'https://github.com/upuldi/spring-boot-rest.git'
+       
+       sh 'ls -lrt'
+   }
+} 
