@@ -65,11 +65,31 @@ pipeline {
 			}
 		}
 
+        stage('Packaging and publishing') {
+			steps {
+				echo "Packaging and publishing artifacts"
+				sh 'mvn package'
+				 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+			}
+		}
+		
         stage('Deploying REST API') {
 			steps {
-				echo "Coping Artifact to a server"
+				echo "Coping Artifact to a server - ${BUILD_NUMBER}"
+
+				sshagent(['CREDENTIALS_ID']) {
+                    sh 'scp target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/'
+                }				
 			}
 		}
 			
     }
+    
+    post { 
+            always { 
+                echo 'Cleaning up the mess, deleting files'
+                sh 'rm -rf dist.zip'
+            }
+        }    
+    
 }
