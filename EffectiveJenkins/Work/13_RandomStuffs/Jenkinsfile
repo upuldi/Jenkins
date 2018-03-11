@@ -18,13 +18,6 @@ pipeline {
 
             echo "${commit[-1]} "
     
-			steps {
-			
-                def ret = sh(script: 'uname', returnStdout: true)
-                echo 'Finishing .....'
-
-            }
-
 			
     }
     
