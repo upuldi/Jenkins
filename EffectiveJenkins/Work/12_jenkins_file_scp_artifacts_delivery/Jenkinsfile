@@ -87,7 +87,7 @@ pipeline {
                     
                     input 'Shutting Down the server, Are you sure you want to proceed ?'
                     
-                    sh "BUILD_ID=dontKillMe  ssh -i ${keyfile} udoluweera@192.168.1.15  'kill $(ps aux | grep 'rest' | awk ''{print $2}'')'  "
+                    sh "BUILD_ID=dontKillMe  ssh -i ${keyfile} udoluweera@192.168.1.15  ' kill $(ps aux | grep ''rest'' | awk ''{print $2}'')'  "
                     
                     input 'About to deploy the code, Are you sure you want to proceed ?'
                     sh "BUILD_ID=dontKillMe  ssh -i ${keyfile} udoluweera@192.168.1.15  'nohup java -jar  /home/udoluweera/temps/tempcopy/*.jar --server.port=9090 > null &'  "
