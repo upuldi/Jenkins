@@ -39,16 +39,6 @@ pipeline {
         stage('deploy development'){
             steps {
                 deploy(developmentServer, serverPort)
-                
-                httpRequest httpMode: 'POST', url: "http://192.168.1.15:9090/shutdown", validResponseCodes: '200,408'
-                sshagent(['RemoteCredentials']) {
-                    sh "scp target/*.jar root@192.168.1.15:/opt/jenkins-demo.jar"
-                    sh "ssh udoluweera@192.168.1.15 nohup java -Dserver.port=9090 -jar /opt/jenkins-demo.jar &"
-                }
-                retry (3) {
-                    sleep 5
-                    httpRequest url:"http://192.168.1.15:9090/health", validResponseCodes: '200', validResponseContent: '"status":"UP"'
-                }
             }
         }
 
@@ -64,6 +54,14 @@ pipeline {
 
 def deploy(def server, def port) {
 
-
+    httpRequest httpMode: 'POST', url: "http://${server}:${port}/shutdown", validResponseCodes: '200,408'
+    sshagent(['RemoteCredentials']) {
+        sh "scp target/*.jar root@${server}:/opt/jenkins-demo.jar"
+        sh "ssh root@${server} nohup java -Dserver.port=${port} -jar /opt/jenkins-demo.jar &"
+    }
+    retry (3) {
+        sleep 5
+        httpRequest url:"http://${server}:${port}/health", validResponseCodes: '200', validResponseContent: '"status":"UP"'
+    }
     
 }
