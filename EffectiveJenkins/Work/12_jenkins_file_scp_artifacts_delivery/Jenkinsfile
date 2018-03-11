@@ -86,8 +86,14 @@ pipeline {
                     
                     
                     input 'Shutting Down the server, Are you sure you want to proceed ?'
-                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  'kill \$(ps aux | grep 'rest' | awk '{print \$2}')'  "
+                    //sh "ssh -i ${keyfile} udoluweera@192.168.1.15  'kill \$(ps aux | grep 'rest' | awk '{print \$2}')'  "
                     //sh "BUILD_ID=dontKillMe  ssh -i ${keyfile} udoluweera@192.168.1.15  '     '  "
+                    
+                    
+                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  \"pid=\$(ps aux | grep 'name' | awk '{print \$2}' | head -1); echo \$pid |xargs kill\"  "
+                    
+                     
+                     
 
                     
                     input 'About to deploy the code, Are you sure you want to proceed ?'
