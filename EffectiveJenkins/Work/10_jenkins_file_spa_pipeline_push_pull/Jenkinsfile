@@ -65,6 +65,14 @@ pipeline {
 			}
 		}
 
+        stage('Packaging and publishing') {
+			steps {
+				echo "Packaging and publishing artifacts"
+				sh 'mvn package'
+				 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+			}
+		}
+		
         stage('Deploying REST API') {
 			steps {
 				echo "Coping Artifact to a server"
