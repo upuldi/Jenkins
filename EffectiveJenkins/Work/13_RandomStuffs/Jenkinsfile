@@ -1,0 +1,32 @@
+ 
+pipeline {
+
+	agent any
+
+	tools {
+		maven 'M3'
+	}
+
+	stages {
+
+        stage('Keeping a response from a script in a variable ......') {
+			steps {
+			
+                SOME_VARIABLE_OUTPUT = sh (
+                    script: ' ls -lrt  ', returnStdout: true
+                ).trim()
+                echo "Response from the output: ${SOME_VARIABLE_OUTPUT}"
+
+                }
+		}
+
+			
+    }
+    
+    post { 
+            always { 
+                echo 'Finishing .....'
+            }
+        }    
+    
+}
