@@ -80,6 +80,7 @@ pipeline {
                 echo "This plugin uses a certificate"
 
                 withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
+                    sh "chmod 600 ${keyfile}"
                     sh "scp -i ${keyfile} target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/"
                 }                
 			}
