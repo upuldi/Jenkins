@@ -1,0 +1,75 @@
+ 
+pipeline {
+
+	agent any
+
+	tools {
+		maven 'M3'
+	}
+
+	stages {
+
+        stage('Checkout SPA') {
+			steps {
+                git 'https://github.com/upuldi/spa_test.git'
+			}
+		}
+
+        stage('Build SPA') {
+			steps {
+                echo "Building SPA"
+                echo "creating dist....."
+                
+			}
+		}
+		
+        stage ('Pusing Artifacts') {
+            steps {
+                //sh 'mkdir archive'
+                //sh 'echo test > archive/test.txt'
+                //zip zipFile: 'dist.zip', archive: false, dir: 'archive'
+                zip zipFile: 'dist.zip', archive: false, dir: 'fake-dist'
+                archiveArtifacts artifacts: 'dist.zip', fingerprint: true
+            }
+        }
+        
+		stage('Checkout REST API') {
+			steps {
+                git 'https://github.com/upuldi/spring-boot-rest.git'
+			}
+		}
+
+        stage('Pulling artifact') {
+            steps {
+                step([  $class: 'CopyArtifact',
+                        filter: 'dist.zip',
+                        fingerprintArtifacts: true,
+                        projectName: '${JOB_NAME}',
+                        selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']
+                ])
+                unzip zipFile: 'dist.zip', dir: './src/main/resources/'
+                sh 'ls src/main/resources/'
+            }
+        }		
+		
+        stage('Compiling REST API') {
+			steps {
+				sh 'mvn clean compile'
+			}
+		}
+
+        stage('Testing REST API') {
+			steps {
+				sh 'mvn test'
+				junit '**/target/surefire-reports/TEST-*.xml'
+			}
+		}
+
+        stage('Deploying REST API') {
+			steps {
+				echo "Coping Artifact to a server"
+			}
+		}
+			
+    }
+}
