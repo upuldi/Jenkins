@@ -82,7 +82,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
                     sh "chmod 600 ${keyfile}"
                     sh "cat ${keyfile}"
-                    sh "scp -v -i ${keyfile} target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/"
+                    sh "scp -v -o StrictHostKeyChecking=no -i ${keyfile} target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/"
                 }                
 			}
 		}
