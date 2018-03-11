@@ -40,7 +40,19 @@ pipeline {
             steps {
                 deploy(developmentServer, serverPort)
                 
-                def deploy(def server, def port) {
+
+
+            }
+        }
+
+    }
+    post {
+        failure {
+            mail to: 'team@example.com', subject: 'Pipeline failed', body: "${env.BUILD_URL}"
+        }
+    }
+    
+                    def deploy(def server, def port) {
 
                     httpRequest httpMode: 'POST', url: "http://${server}:${port}/shutdown", validResponseCodes: '200,408'
                     sshagent(['RemoteCredentials']) {
@@ -54,16 +66,6 @@ pipeline {
                     
                 }
 
-
-            }
-        }
-
-    }
-    post {
-        failure {
-            mail to: 'team@example.com', subject: 'Pipeline failed', body: "${env.BUILD_URL}"
-        }
-    }
 }
 
 
