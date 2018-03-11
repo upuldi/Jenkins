@@ -1,0 +1,100 @@
+ 
+pipeline {
+
+	agent any
+
+	tools {
+		maven 'M3'
+	}
+
+	stages {
+
+        stage('Checkout SPA') {
+			steps {
+                git 'https://github.com/upuldi/spa_test.git'
+			}
+		}
+
+        stage('Build SPA') {
+			steps {
+                echo "Building SPA"
+                echo "creating dist....."
+                
+			}
+		}
+		
+        stage ('Pusing Artifacts') {
+            steps {
+                //sh 'mkdir archive'
+                //sh 'echo test > archive/test.txt'
+                //zip zipFile: 'dist.zip', archive: false, dir: 'archive'
+                zip zipFile: 'dist.zip', archive: false, dir: 'fake-dist'
+                archiveArtifacts artifacts: 'dist.zip', fingerprint: true
+            }
+        }
+        
+		stage('Checkout REST API') {
+			steps {
+                git 'https://github.com/upuldi/spring-boot-rest.git'
+			}
+		}
+
+        stage('Pulling artifact') {
+            steps {
+                step([  $class: 'CopyArtifact',
+                        filter: 'dist.zip',
+                        fingerprintArtifacts: true,
+                        projectName: '${JOB_NAME}',
+                        selector: [$class: 'SpecificBuildSelector', buildNumber: '${BUILD_NUMBER}']
+                ])
+                unzip zipFile: 'dist.zip', dir: './src/main/resources/'
+                sh 'ls src/main/resources/'
+            }
+        }		
+		
+        stage('Compiling REST API') {
+			steps {
+				sh 'mvn clean compile'
+			}
+		}
+
+        stage('Testing REST API') {
+			steps {
+				sh 'mvn test'
+				junit '**/target/surefire-reports/TEST-*.xml'
+			}
+		}
+
+        stage('Packaging and publishing') {
+			steps {
+				echo "Packaging and publishing artifacts"
+				sh 'mvn package'
+				 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+			}
+		}
+		
+        stage('Deploying REST API') {
+			steps {
+
+                echo "Coping Artifact to a server - ${BUILD_NUMBER}"
+                echo "This plugin uses a certificate"
+
+                withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
+                    sh "chmod 600 ${keyfile}"
+                    sh "cat ${keyfile}"
+                    sh "scp -v -o StrictHostKeyChecking=no -i ${keyfile} target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/"
+                    sh "ssh udoluweera@192.168.1.15  'nohup java -jar /home/udoluweera/temps/tempcopy/*.jar &'  "
+                }                
+			}
+		}
+			
+    }
+    
+    post { 
+            always { 
+                echo 'Cleaning up the mess, deleting files'
+                sh 'rm -rf dist.zip'
+            }
+        }    
+    
+}

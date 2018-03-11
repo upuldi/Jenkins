@@ -1,0 +1,4 @@
+Generate Public key and a Private key, 
+Add the private key to the Jenkins Credentials 
+Add the public key to the destination computer authorised keys.
+So now the private key used by the Jenkins can commiunicate with the public key added to the autorised keys.
