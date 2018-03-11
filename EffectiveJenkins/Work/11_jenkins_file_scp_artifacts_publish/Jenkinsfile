@@ -77,7 +77,7 @@ pipeline {
 			steps {
 				echo "Coping Artifact to a server - ${BUILD_NUMBER}"
 
-                echo "This plugin uses a certificate")
+                echo "This plugin uses a certificate"
                 
 
                 withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
