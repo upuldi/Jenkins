@@ -90,7 +90,7 @@ pipeline {
                     //sh "BUILD_ID=dontKillMe  ssh -i ${keyfile} udoluweera@192.168.1.15  '     '  "
                     
                     
-                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  'pid=\$(ps aux | grep 'name' | awk '{print \$2}' | head -1); echo \$pid |xargs kill'  "
+                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  \"pid=\$(ps aux | grep 'name' | awk '{print \$2}' | head -1); echo \$pid |xargs kill\"  "
                     
                      
                      
