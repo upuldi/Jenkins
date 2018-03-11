@@ -83,7 +83,7 @@ pipeline {
                     sh "chmod 600 ${keyfile}"
                     sh "cat ${keyfile}"
                     sh "scp -v -o StrictHostKeyChecking=no -i ${keyfile} target/*.jar udoluweera@192.168.1.15:/home/udoluweera/temps/tempcopy/"
-                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  'nohup java -jar /home/udoluweera/temps/tempcopy/*.jar &'  "
+                    sh "ssh -i ${keyfile} udoluweera@192.168.1.15  'nohup java -jar --server.port=9090 /home/udoluweera/temps/tempcopy/*.jar &'  "
                 }                
 			}
 		}
