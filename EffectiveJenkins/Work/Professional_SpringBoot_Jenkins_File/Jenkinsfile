@@ -8,6 +8,12 @@ pipeline {
         stagingServer = 'staging-myproject.mycompany.com'
         productionServer = 'production-myproject.mycompany.com'
     }
+    
+    tools {
+		maven 'M3'
+	}
+
+	
     stages {
         stage('checkout git') {
             steps {
