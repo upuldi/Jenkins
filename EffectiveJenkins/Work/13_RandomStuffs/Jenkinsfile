@@ -11,11 +11,12 @@ pipeline {
 
         stage('Keeping a response from a script in a variable ......') {
         
-         //   def commit = sh (returnStdout: true, script: '''echo hi ''').split()
-
-          //  echo "${commit[-1]} "
+            def commit = sh (returnStdout: true, script: '''echo hi ''').split()
+            echo "${commit[-1]} "
     
 			
+        }
+    
     }
     
     post { 
