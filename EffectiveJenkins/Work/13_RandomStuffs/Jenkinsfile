@@ -40,6 +40,30 @@ pipeline {
                 }
             }
         }
+        
+        
+        stage('Curl') {
+            steps {
+                script {
+                    def curl = sh (returnStdout: true, script: """ 
+                    
+                    
+                    curl -S -i -k -X POST http://www.google.com -H \"Content-Type: application/json\" -H \"Accept: application/json\" -d @request1.json | grep token | cut -d, -f1 | cut -d\" -f4
+                    
+                    
+                    """).split()
+                    echo "${curl} "            
+                }
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
     
     }
     
