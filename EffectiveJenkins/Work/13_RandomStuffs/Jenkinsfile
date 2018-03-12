@@ -23,13 +23,23 @@ pipeline {
         stage('Varible from definition') {
             steps {
                 script {
-                    def commit = sh (returnStdout: true, script: '''echo hi ''').split()
+                    def commit = sh (returnStdout: true, script: '''echo hi
+    echo bye | grep -o "e"
+    date
+    echo lol''').split()
                     echo "${commit[-1]} "            
                 }
             }
         }
         
-        
+        stage('Uname') {
+            steps {
+                script {
+                    def uname = sh (returnStdout: true, script: '''uname -r''').split()
+                    echo "${uname} "            
+                }
+            }
+        }
     
     }
     
