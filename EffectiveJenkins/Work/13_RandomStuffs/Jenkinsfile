@@ -20,7 +20,7 @@ pipeline {
 		}
 
         
-        stage('Varible from environment') {
+        stage('Varible from definition') {
             steps {
                 script {
                     def commit = sh (returnStdout: true, script: '''echo hi ''').split()
