@@ -12,24 +12,21 @@ pipeline {
 	}
 
 	stages {
+	
+        stage('Varible from environment') {
+			steps {
+				sh 'echo ${varibleDefinition}'
+			}
+		}
 
-        stage('Varible from environment') {
-            steps {
-                sh "echo ${varibleDefinition}"
-            }
-        }
         
         stage('Varible from environment') {
-        
             steps {
                 script {
                     def commit = sh (returnStdout: true, script: '''echo hi ''').split()
                     echo "${commit[-1]} "            
                 }
             }
-        
-    
-			 sh "echo ${FOO}"
         }
         
         
