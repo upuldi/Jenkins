@@ -3,22 +3,36 @@ pipeline {
 
 	agent any
 
+    environment {
+        varibleDefinition = "foo"
+    }
+   
 	tools {
 		maven 'M3'
 	}
 
 	stages {
 
-        stage('Keeping a response from a script in a variable ......') {
+        stage('Varible from environment') {
+            steps {
+                sh "echo ${varibleDefinition}"
+            }
+        }
+        
+        stage('Varible from environment') {
         
             steps {
-                def commit = sh (returnStdout: true, script: '''echo hi ''').split()
-                echo "${commit[-1]} "            
+                script {
+                    def commit = sh (returnStdout: true, script: '''echo hi ''').split()
+                    echo "${commit[-1]} "            
+                }
             }
         
     
-			
+			 sh "echo ${FOO}"
         }
+        
+        
     
     }
     
